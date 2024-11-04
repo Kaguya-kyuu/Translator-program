@@ -10,7 +10,7 @@
 - Sean Yin (GitHub Username: PikachuSean)
 - Haoxuan Qiu (GitHub Username: Kaguya-kyuu)
 - Doran Wang (GitHub Username: Wang20030509)
-- Charles Cai (GitHub Username: [ ])
+- Charles Cai (GitHub Username: [])
 
 * * *
 
