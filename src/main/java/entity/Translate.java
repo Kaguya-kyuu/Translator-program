@@ -26,10 +26,25 @@ public class Translate {
         return inputText;
     }
 
+
+    /**
+     * Translate the given text.
+     * @return The result of the translation.
+     */
     public String translateText() {
-        String authKey = "563c8dbf-539b-48c2-bc82-fae6a6622677:fx";
-        Translator translator = new Translator(authKey);
-        TextResult result = translator.translateText(inputText, inputLanguage, outputLanguage);
-        return result.getText();
+        String output = null;
+        try {
+            final String authKey = "563c8dbf-539b-48c2-bc82-fae6a6622677:fx";
+            final Translator translator = new Translator(authKey);
+            final TextResult result = translator.translateText(inputText, inputLanguage, outputLanguage);
+            output = result.getText();
+        }
+        catch (DeepLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        catch (InterruptedException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return output;
     }
 }
