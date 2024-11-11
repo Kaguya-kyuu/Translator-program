@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -34,37 +35,64 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JLabel username;
 
     private final JButton logOut;
+    private final JButton translate;
+    private final JButton history;
 
-    private final JTextField passwordInputField = new JTextField(15);
-    private final JButton changePassword;
+    private final JTextField languageInputField = new JTextField(15);
+    private final JTextField languageOutputField = new JTextField(15);
 
     public LoggedInView(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
 
-        final JLabel title = new JLabel("Logged In Screen");
+        final JLabel title = new JLabel("Translator Name");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        final LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel("Password"), passwordInputField);
+        final LabelTextPanel languageInput = new LabelTextPanel(
+                new JLabel(""), languageInputField);
+
+        final LabelTextPanel languageOutput = new LabelTextPanel(
+                new JLabel(""), languageOutputField);
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
         username = new JLabel();
+
+        final JLabel languageInfo = new JLabel("Language");
+        final JLabel translatedLanguageInfo = new JLabel("             Language");
+
+        final JLabel sourceLanguageLabel = new JLabel("Source Language: ");
+        final JLabel translatedLanguageLabel = new JLabel("Translated Language: ");
 
         final JPanel buttons = new JPanel();
         logOut = new JButton("Log Out");
         buttons.add(logOut);
 
-        changePassword = new JButton("Change Password");
-        buttons.add(changePassword);
+        translate = new JButton("Translate");
+        buttons.add(translate);
+
+        history = new JButton("History");
+        buttons.add(history);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
+        final JPanel firstRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        firstRow.add(sourceLanguageLabel);
+        firstRow.add(buttons.getComponent(1));
+        firstRow.add(translatedLanguageLabel);
+
+        final JPanel seconedRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        seconedRow.add(languageInput);
+        seconedRow.add(languageOutput);
+
+        final JPanel thiredRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        thiredRow.add(languageInfo);
+        thiredRow.add(translatedLanguageInfo);
+
+        languageInputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
                 final LoggedInState currentState = loggedInViewModel.getState();
-                currentState.setPassword(passwordInputField.getText());
+                currentState.setPassword(languageInputField.getText());
                 loggedInViewModel.setState(currentState);
             }
 
@@ -84,10 +112,34 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        changePassword.addActionListener(
+        languageOutputField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final LoggedInState currentState = loggedInViewModel.getState();
+                currentState.setPassword(languageOutputField.getText());
+                loggedInViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+
+        translate.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
-                    if (evt.getSource().equals(changePassword)) {
+                    if (evt.getSource().equals(translate)) {
                         final LoggedInState currentState = loggedInViewModel.getState();
 
                         this.changePasswordController.execute(
@@ -118,9 +170,13 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.add(usernameInfo);
         this.add(username);
 
-        this.add(passwordInfo);
-        this.add(passwordErrorField);
-        this.add(buttons);
+        this.add(firstRow);
+
+        this.add(seconedRow);
+
+        this.add(thiredRow);
+
+        this.add(buttons.getComponent(0));
     }
 
     @Override
