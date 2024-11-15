@@ -33,7 +33,7 @@ public class Translate {
      * Translate the given text.
      * @return The result of the translation.
      */
-    public String translateText() {
+    public static String translateText(String inputText, String inputLanguage, String outputLanguage) {
         String output = null;
         try {
             final String authKey = "563c8dbf-539b-48c2-bc82-fae6a6622677:fx";
