@@ -29,7 +29,6 @@ public class Translate {
         return inputText;
     }
 
-
     /**
      * Translate the given text.
      * @return The result of the translation.
