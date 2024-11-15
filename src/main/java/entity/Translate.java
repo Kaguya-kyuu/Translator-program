@@ -2,6 +2,9 @@ package entity;
 
 import com.deepl.api.*;
 
+/**
+ * Translator.
+ */
 public class Translate {
 
     private final String inputLanguage;
