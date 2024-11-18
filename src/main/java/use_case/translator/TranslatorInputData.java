@@ -5,15 +5,17 @@ package use_case.translator;
  */
 public class TranslatorInputData {
     private final String input;
-    private String inputLanguage;
+    private final String inputLanguage;
+    private final String outputLanguage;
 
-    public TranslatorInputData(String input) {
-        this.input = input;
-    }
+//    public TranslatorInputData(String input) {
+//        this.input = input;
+//    }
 
-    public TranslatorInputData(String input, String inputLanguage) {
+    public TranslatorInputData(String input, String inputLanguage, String outputLanguage) {
         this.input = input;
         this.inputLanguage = inputLanguage;
+        this.outputLanguage = outputLanguage;
     }
 
     public String getInput() {
@@ -22,5 +24,9 @@ public class TranslatorInputData {
 
     public String getInputLanguage() {
         return inputLanguage;
+    }
+
+    public String getOutputLanguage() {
+        return outputLanguage;
     }
 }
