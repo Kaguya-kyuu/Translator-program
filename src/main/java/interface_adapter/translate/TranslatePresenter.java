@@ -10,14 +10,11 @@ import use_case.translator.TranslatorOutputData;
 public class TranslatePresenter implements TranslatorOutputBoundary {
 
     private final TranslateViewModel translateViewModel;
-    private final TranslatedViewModel translatedViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public TranslatePresenter(ViewManagerModel viewManagerModel,
-                          TranslatedViewModel translatedViewModel,
                           TranslateViewModel translateViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.translatedViewModel = translatedViewModel;
         this.translateViewModel = translateViewModel;
     }
 
@@ -27,12 +24,12 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
      */
     @Override
     public void prepareSuccessView(TranslatorOutputData outputData) {
-        final TranslatedState translatedState = translatedViewModel.getState();
-        translatedState.setOutputText(outputData.getOutputText());
-        this.translatedViewModel.setState(translatedState);
-        this.translatedViewModel.firePropertyChanged();
+        final TranslateState translateState = translateViewModel.getState();
+        translateState.setOutputText(outputData.getOutputText());
+        this.translateViewModel.setState(translateState);
+        this.translateViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(translatedViewModel.getViewName());
+        this.viewManagerModel.setState(translateViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
@@ -43,7 +40,7 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         final TranslateState translateState = translateViewModel.getState();
-        translateState.setTranslateError(errorMessage);
+        translateState.setTranslationError(errorMessage);
         translateViewModel.firePropertyChanged();
     }
 }
