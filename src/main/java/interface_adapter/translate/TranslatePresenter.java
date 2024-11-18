@@ -27,8 +27,8 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
      */
     @Override
     public void prepareSuccessView(TranslatorOutputData outputData) {
-        final TranslatedState translatedState = translatedViewModel.getState();
-        translatedState.setOutputText(outputData.getOutputText());
+        final TranslateState translateState = translatedViewModel.getState();
+        translateState.setOutputText(outputData.getOutputText());
         this.translatedViewModel.setState(translatedState);
         this.translatedViewModel.firePropertyChanged();
 
@@ -43,7 +43,7 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         final TranslateState translateState = translateViewModel.getState();
-        translateState.setTranslateError(errorMessage);
+        translateState.setTranslationError(errorMessage);
         translateViewModel.firePropertyChanged();
     }
 }
