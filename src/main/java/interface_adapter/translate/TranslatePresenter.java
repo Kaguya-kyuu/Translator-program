@@ -10,14 +10,11 @@ import use_case.translator.TranslatorOutputData;
 public class TranslatePresenter implements TranslatorOutputBoundary {
 
     private final TranslateViewModel translateViewModel;
-    private final TranslatedViewModel translatedViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public TranslatePresenter(ViewManagerModel viewManagerModel,
-                          TranslatedViewModel translatedViewModel,
                           TranslateViewModel translateViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.translatedViewModel = translatedViewModel;
         this.translateViewModel = translateViewModel;
     }
 
@@ -27,12 +24,12 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
      */
     @Override
     public void prepareSuccessView(TranslatorOutputData outputData) {
-        final TranslateState translateState = translatedViewModel.getState();
+        final TranslateState translateState = translateViewModel.getState();
         translateState.setOutputText(outputData.getOutputText());
-        this.translatedViewModel.setState(translatedState);
-        this.translatedViewModel.firePropertyChanged();
+        this.translateViewModel.setState(translateState);
+        this.translateViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(translatedViewModel.getViewName());
+        this.viewManagerModel.setState(translateViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
