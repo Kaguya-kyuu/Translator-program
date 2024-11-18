@@ -16,7 +16,7 @@ public class Translate {
         this.inputLanguage = inputLanguage;
         this.outputLanguage = outputLanguage;
         this.inputText = inputText;
-        this.outputText = translateText();
+        this.outputText = translateText(inputLanguage, outputLanguage, inputText);
     }
 
     public String getInputLanguage() {
@@ -33,14 +33,17 @@ public class Translate {
 
     /**
      * Translate the given text.
+     * @param inputLang input language
+     * @param outputLang output language
+     * @param input input text
      * @return The result of the translation.
      */
-    private String translateText() {
+    private String translateText(String inputLang, String outputLang, String input) {
         String output = null;
         try {
             final String authKey = "563c8dbf-539b-48c2-bc82-fae6a6622677:fx";
             final Translator translator = new Translator(authKey);
-            final TextResult result = translator.translateText(inputText, inputLanguage, outputLanguage);
+            final TextResult result = translator.translateText(input, inputLang, outputLang);
             output = result.getText();
         }
         catch (DeepLException exception) {
