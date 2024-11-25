@@ -117,4 +117,23 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     public List<Bookmark> getBookmarksByUser(String username) {
         return List.of();
     }
+
+    public interface ChangePasswordUserDataAccessInterface {
+        boolean updatePassword(String newPassword);
+    }
+
+    public class InMemoryUserDataAccessObject implements ChangePasswordUserDataAccessInterface {
+        private User currentUser;
+
+        @Override
+        public boolean updatePassword(String newPassword) {
+            if (currentUser != null) {
+                currentUser.setPassword(newPassword);
+                return true;
+            }
+            return false;
+        }
+    }
+
 }
+
