@@ -249,4 +249,18 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     public void setLogoutController(LogoutController logoutController) {
         this.logoutController = logoutController;
     }
+
+    public class ChangePasswordView extends JPanel {
+        public ChangePasswordView() {
+            this.setLayout(new GridLayout(2, 1));
+
+            // Other components here...
+
+            JButton changePasswordButton = new JButton("Change Password");
+            changePasswordButton.addActionListener(e -> {
+                ViewManager.getInstance().navigateTo(new ChangePasswordView());
+            });
+            this.add(changePasswordButton);
+        }
+    }
 }
