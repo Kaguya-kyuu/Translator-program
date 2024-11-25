@@ -20,6 +20,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.logout.LogoutController;
+import interface_adapter.translate.TranslateController;
+import interface_adapter.translate.TranslateState;
+import interface_adapter.translate.TranslateViewModel;
 
 /**
  * The View for when the user is logged into the program.
@@ -28,22 +31,28 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
+    private final TranslateViewModel translateViewModel;
     private final JLabel passwordErrorField = new JLabel();
     private ChangePasswordController changePasswordController;
     private LogoutController logoutController;
+    private TranslateController translateController;
 
     private final JLabel username;
 
     private final JButton logOut;
     private final JButton translate;
     private final JButton history;
+    private final JButton toBookmarkButton;
 
     private final JTextField languageInputField = new JTextField(15);
     private final JTextField languageOutputField = new JTextField(15);
+    private final JTextField inputTextField = new JTextField(20);
+    private final JTextArea translatedTextArea = new JTextArea(5, 20);
 
     public LoggedInView(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
+        this.translateViewModel = new TranslateViewModel();
 
         final JLabel title = new JLabel("Translator Name");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -73,6 +82,16 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         history = new JButton("History");
         buttons.add(history);
 
+        toBookmarkButton = new JButton("Bookmark");
+        buttons.add(toBookmarkButton);
+
+        toBookmarkButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        changePasswordController.switchToBookmarkView();
+                    }
+                }
+        );
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final JPanel firstRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -88,12 +107,12 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         thiredRow.add(languageInfo);
         thiredRow.add(translatedLanguageInfo);
 
-        languageInputField.getDocument().addDocumentListener(new DocumentListener() {
+        languageOutputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
-                final LoggedInState currentState = loggedInViewModel.getState();
-                currentState.setPassword(languageInputField.getText());
-                loggedInViewModel.setState(currentState);
+                final TranslateState currentState = translateViewModel.getState();
+                currentState.setOutputLanguage(languageOutputField.getText());
+                translateViewModel.setState(currentState);
             }
 
             @Override
@@ -112,12 +131,38 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        languageOutputField.getDocument().addDocumentListener(new DocumentListener() {
+        languageInputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
-                final LoggedInState currentState = loggedInViewModel.getState();
-                currentState.setPassword(languageOutputField.getText());
-                loggedInViewModel.setState(currentState);
+                final TranslateState currentState = translateViewModel.getState();
+                currentState.setInputLanguage(languageInputField.getText());
+                translateViewModel.setState(currentState);
+
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+
+        inputTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final TranslateState currentState = translateViewModel.getState();
+                currentState.setInputText(inputTextField.getText());
+                translateViewModel.setState(currentState);
+
             }
 
             @Override
@@ -140,13 +185,14 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
                     if (evt.getSource().equals(translate)) {
-                        final LoggedInState currentState = loggedInViewModel.getState();
+                        final TranslateState currentState = translateViewModel.getState();
 
-                        this.changePasswordController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword()
-                        );
+                        this.translateController.execute(currentState.getInputLanguage(),
+                                currentState.getOutputLanguage(), currentState.getInputText());
+                        translatedTextArea.setText(currentState.getOutputText());
+
                     }
+
                 }
         );
 
@@ -176,7 +222,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         this.add(thiredRow);
 
-        this.add(buttons.getComponent(0));
+        this.add(buttons);
     }
 
     @Override
