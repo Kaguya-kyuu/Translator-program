@@ -16,4 +16,9 @@ public interface HistoryOutputBoundary {
      * @param errorMessage the explanation of the failure
      */
     void prepareFailView(String errorMessage);
+
+    /**
+     * Executes to go back to translate view.
+     */
+    void switchBackToTranslateView();
 }

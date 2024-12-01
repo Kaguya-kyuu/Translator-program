@@ -43,8 +43,11 @@ public class HistoryInteractor implements HistoryInputBoundary {
         }
     }
 
+    /**
+     * Switch back to Translate View.
+     */
     @Override
-    public void switchToLoginView() {
-        userPresenter.switchToLoginView();
+    public void switchBackToTranslateView() {
+        historyPresenter.switchBackToTranslateView();
     }
 }

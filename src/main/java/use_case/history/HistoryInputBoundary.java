@@ -12,7 +12,7 @@ public interface HistoryInputBoundary {
     void execute(HistoryInputData historyInputData);
 
     /**
-     * Executes the switch to login view use case.
+     * Executes to go back to translate view.
      */
     void switchBackToTranslateView();
 }

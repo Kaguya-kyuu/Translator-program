@@ -25,4 +25,11 @@ public class HistoryController {
 
         historyUseCaseInteractor.execute(historyInputData);
     }
+
+    /**
+     * Executes the "switch to LoginView" Use Case.
+     */
+    public void switchBackToTranslateView() {
+        historyUseCaseInteractor.switchBackToTranslateView();
+    }
 }
