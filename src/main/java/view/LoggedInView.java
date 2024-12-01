@@ -37,6 +37,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JButton logOut;
     private final JButton translate;
     private final JButton history;
+    private final JButton changepassword;
 
     private final JTextField languageInputField = new JTextField(15);
     private final JTextField languageOutputField = new JTextField(15);
@@ -45,7 +46,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
 
-        final JLabel title = new JLabel("Translator Name");
+        final JLabel title = new JLabel("Translator");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final LabelTextPanel languageInput = new LabelTextPanel(
@@ -73,6 +74,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         history = new JButton("History");
         buttons.add(history);
 
+        changepassword = new JButton("Change Password");
+        buttons.add(changepassword);
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final JPanel firstRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -80,13 +84,19 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         firstRow.add(buttons.getComponent(1));
         firstRow.add(translatedLanguageLabel);
 
-        final JPanel seconedRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        seconedRow.add(languageInput);
-        seconedRow.add(languageOutput);
+        final JPanel secondRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        secondRow.add(languageInput);
+        secondRow.add(languageOutput);
 
-        final JPanel thiredRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        thiredRow.add(languageInfo);
-        thiredRow.add(translatedLanguageInfo);
+        final JPanel thirdRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        thirdRow.add(languageInfo);
+        thirdRow.add(translatedLanguageInfo);
+
+        final JPanel fourthRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fourthRow.add(history);
+        fourthRow.add(bookmark);
+        fourthRow.add(feedback);
+        fourthRow.add(changepassword);
 
         languageInputField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -142,9 +152,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     if (evt.getSource().equals(translate)) {
                         final LoggedInState currentState = loggedInViewModel.getState();
 
-                        this.changePasswordController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword()
+                        this.TranslatorController.execute(
+                                currentState.getUsername()
                         );
                     }
                 }
@@ -160,6 +169,21 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
                             logoutController.execute(
                                     currentState.getUsername()
+                            );
+                        }
+                    }
+                }
+        );
+
+        changepassword.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(changepassword)) {
+                            final LoggedInState currentState = loggedInViewModel.getState();
+
+                            ChangePasswordController.execute(
+                                    currentState.getUsername(),
+                                    currentState.getPassword()
                             );
                         }
                     }

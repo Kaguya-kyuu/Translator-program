@@ -96,4 +96,18 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         translates.put(updatedTranslation.getInputText(), updatedTranslation);
 
     }
+
+    public class InMemoryUserDataAccessObject implements ChangePasswordUserDataAccessInterface {
+        private User currentUser;
+
+        @Override
+        public boolean updatePassword(String newPassword) {
+            if (currentUser != null) {
+                currentUser.setPassword(newPassword);
+                return true;
+            }
+            return false;
+        }
+    }
+
 }
