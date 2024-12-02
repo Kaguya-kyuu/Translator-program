@@ -22,11 +22,11 @@ The program allows users to translate between several languages. Users can creat
 **User Stories:**
 1. Bob creates and signs in to an account for the translation app. He translates a sentence from one language to another and receives a translation from the app. (Team story)
 
-2. Bob is a student in a language class. His teacher has created a class account for all the students to use, and he wants to see the translations that his teacher displayed in class. He signs in to the class account, and he views the translation history. (Doran)
+2. Bob is a student in a language class. His teacher has created a class account for all the students to use, and he wants to see the translations that his teacher displayed in class. He signs in to the class account, and he views the translation history. (Ericka)
 
 3. Bob is a user of the translation app. He translates a sentence from one language to another. He finds the translation inaccurate and decides to submit a suggestion for a better translation. After some time, the suggestion is accepted by the developers of the app and now the app displays the new suggested translation. (Sean)
 
-4. Bob is studying a second language. Sometimes he wants to be able to save his translation result for future review. So he decides to bookmark it so he can see it later by accessing his bookmarked translations. (Ericka)
+4. Bob is studying a second language. Sometimes he wants to be able to save his translation result for future review. So he decides to bookmark it so he can see it later by accessing his bookmarked translations. (Doran)
 
 5. Bob is sick and tired of google translate so he decided to find a better translator. He found this amazing translator called (our app name). He finds out there is a create account/sign in function which is always ignored on translator apps. He decided to create an account and found out there are so many useful functions! He translated a long paragraph that he will be working on for a few days. Unfortunately, he forgot to bookmark it, but he looks through his translation history to find it and bookmarks it from there so he can come back to it within a few clicks. (Charles)
 

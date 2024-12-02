@@ -17,12 +17,14 @@ public class Main {
                                             .addSignupView()
                                             .addTranslateView()
                                             .addHistoryView()
+                                            .addBookmarkView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
                                             .addChangePasswordUseCase()
                                             .addTranslateUseCase()
                                             .addHistoryUseCase()
+                                            .addBookmarkUseCase()
                                             .build();
         application.setLocation(550, 200);
         application.setSize(600, 200);

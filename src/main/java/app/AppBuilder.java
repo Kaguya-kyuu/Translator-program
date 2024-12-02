@@ -7,10 +7,14 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
+import entity.BookmarkFactory;
 import entity.CommonUserFactory;
 import entity.TranslateFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.bookmark.BookmarkController;
+import interface_adapter.bookmark.BookmarkPresenter;
+import interface_adapter.bookmark.BookmarkViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
@@ -25,6 +29,9 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import use_case.bookmark.BookmarkInputBoundary;
+import use_case.bookmark.BookmarkInteractor;
+import use_case.bookmark.BookmarkOutputBoundary;
 import interface_adapter.translate.TranslateController;
 import interface_adapter.translate.TranslatePresenter;
 import interface_adapter.translate.TranslateViewModel;
@@ -47,6 +54,11 @@ import use_case.translator.TranslatorInputBoundary;
 import use_case.translator.TranslatorInteractor;
 import use_case.translator.TranslatorOutputBoundary;
 import view.*;
+import view.BookmarkView;
+import view.LoggedInView;
+import view.LoginView;
+import view.SignupView;
+import view.ViewManager;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -80,6 +92,8 @@ public class AppBuilder {
     private LoginView loginView;
     private HistoryViewModel historyViewModel;
     private HistoryView historyView;
+    private BookmarkViewModel bookmarkViewModel;
+    private BookmarkView bookmarkView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -132,6 +146,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Bookmark View to the application.
+     * @return this builder
+     */
+    public AppBuilder addBookmarkView() {
+        bookmarkViewModel = new BookmarkViewModel();
+        bookmarkView = new BookmarkView(bookmarkViewModel);
+        cardPanel.add(bookmarkView, bookmarkView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Signup Use Case to the application.
      * @return this builder
      */
@@ -167,7 +192,7 @@ public class AppBuilder {
      */
     public AppBuilder addChangePasswordUseCase() {
         final ChangePasswordOutputBoundary changePasswordOutputBoundary =
-                new ChangePasswordPresenter(loggedInViewModel);
+                new ChangePasswordPresenter(loggedInViewModel, viewManagerModel, bookmarkViewModel);
 
         final ChangePasswordInputBoundary changePasswordInteractor =
                 new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
@@ -217,6 +242,22 @@ public class AppBuilder {
         final TranslateController translateController =
                 new TranslateController(translatorInteractor);
         translateView.setTranslateController(translateController);
+        return this;
+    }
+
+    /**
+     * Adds the Bookmark Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addBookmarkUseCase() {
+        final BookmarkOutputBoundary bookmarkOutputBoundary = new BookmarkPresenter(bookmarkViewModel);
+        final BookmarkFactory bookmarkFactory = new BookmarkFactory();
+
+        final BookmarkInputBoundary bookmarkInteractor = new BookmarkInteractor(
+                userDataAccessObject, bookmarkOutputBoundary, bookmarkFactory);
+
+        final BookmarkController bookmarkController = new BookmarkController(bookmarkInteractor);
+        bookmarkView.setBookmarkController(bookmarkController);
         return this;
     }
 

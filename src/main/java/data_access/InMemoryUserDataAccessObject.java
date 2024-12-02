@@ -1,11 +1,14 @@
 package data_access;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import entity.Bookmark;
 import entity.Translate;
 import entity.User;
+import use_case.bookmark.BookmarkUserDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.history.HistoryUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
@@ -22,15 +25,15 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         TranslatorUserDataAccessInterface,
-        HistoryUserDataAccessInterface {
+        HistoryUserDataAccessInterface,
+        BookmarkUserDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
+    private final Map<String, List<Bookmark>> userBookmarks = new HashMap<>();
+    private final Map<String, Translate> translates = new HashMap<>();
+    private final Map<User, List<Translate>> userTranslates = new HashMap<>();
 
     private String currentUsername;
-
-    private final Map<String, Translate> translates = new HashMap<>();
-
-    private final Map<User, List<Translate>> userTranslates = new HashMap<>();
 
     @Override
     public boolean existsByName(String identifier) {
@@ -115,4 +118,23 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
             System.out.println("Selected history doesn't exist.");
         }
     }
+
+    @Override
+    public void addBookmark(Bookmark bookmark) {
+        userBookmarks.computeIfAbsent(bookmark.getUsername(), mark -> new ArrayList<>()).add(bookmark);
+    }
+
+    @Override
+    public void removeBookmark(Bookmark bookmark) {
+        final List<Bookmark> bookmarks = userBookmarks.get(bookmark.getUsername());
+        if (bookmarks != null) {
+            bookmarks.removeIf(mark -> mark.getTranslationId().equals(bookmark.getTranslationId()));
+        }
+    }
+
+    @Override
+    public List<Bookmark> getBookmarksByUser(String username) {
+        return List.of();
+    }
+
 }
