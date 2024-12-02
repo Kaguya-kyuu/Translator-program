@@ -19,6 +19,7 @@ public class Main {
                                             .addHistoryView()
                                             .addBookmarkView()
                                             .addFeedbackView()
+                                            .addChangePasswordView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()

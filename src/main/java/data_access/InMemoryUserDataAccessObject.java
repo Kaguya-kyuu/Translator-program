@@ -133,7 +133,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     public void removeBookmark(Bookmark bookmark) {
         final List<Bookmark> bookmarks = userBookmarks.get(bookmark.getUsername());
         if (bookmarks != null) {
-            bookmarks.removeIf(mark -> mark.getTranslationId().equals(bookmark.getTranslationId()));
+            bookmarks.removeIf(mark -> mark.getInputText().equals(bookmark.getInputText()));
         }
     }
 
