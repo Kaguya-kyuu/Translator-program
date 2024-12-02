@@ -221,7 +221,8 @@ public class AppBuilder {
 
     public AppBuilder addHistoryUseCase() {
         final HistoryOutputBoundary historyOutputBoundary =
-                new HistoryPresenter(historyViewModel, viewManagerModel);
+                new HistoryPresenter(historyViewModel, loggedInViewModel,
+                        viewManagerModel);
 
         final HistoryInputBoundary historyInteractor =
                 new HistoryInteractor(userDataAccessObject, historyOutputBoundary);
@@ -229,6 +230,7 @@ public class AppBuilder {
         final HistoryController historyController =
                 new HistoryController(historyInteractor);
         historyView.setHistoryController(historyController);
+        translateView.setHistoryController(historyController);
         return this;
     }
 

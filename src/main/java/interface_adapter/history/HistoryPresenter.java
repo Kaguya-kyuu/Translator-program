@@ -1,6 +1,7 @@
 package interface_adapter.history;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.translate.TranslateState;
 import interface_adapter.translate.TranslateViewModel;
 import use_case.history.HistoryOutputBoundary;
@@ -11,10 +12,12 @@ import use_case.history.HistoryOutputData;
  */
 public class HistoryPresenter implements HistoryOutputBoundary {
     private final HistoryViewModel historyViewModel;
+    private final LoggedInViewModel loggedInViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public HistoryPresenter(HistoryViewModel historyViewModel, ViewManagerModel viewManagerModel) {
+    public HistoryPresenter(HistoryViewModel historyViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel) {
         this.historyViewModel = historyViewModel;
+        this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 
@@ -30,8 +33,7 @@ public class HistoryPresenter implements HistoryOutputBoundary {
         this.historyViewModel.firePropertyChanged("history");
 
         this.viewManagerModel.setState(historyViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged("history");
-
+        this.viewManagerModel.firePropertyChanged();
     }
 
     /**
@@ -47,7 +49,13 @@ public class HistoryPresenter implements HistoryOutputBoundary {
 
     @Override
     public void switchBackToTranslateView() {
+        viewManagerModel.setState(loggedInViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToHistoryView() {
         viewManagerModel.setState(historyViewModel.getViewName());
-        viewManagerModel.firePropertyChanged("history");
+        viewManagerModel.firePropertyChanged();
     }
 }

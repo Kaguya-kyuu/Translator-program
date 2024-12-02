@@ -142,11 +142,8 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
         seconedRow.add(languageInputField);
         seconedRow.add(languageOutputField);
 
-
-//        final JPanel thiredRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//        thiredRow.add(languageInfo);
-//        thiredRow.add(translatedLanguageInfo);
-
+        final JPanel thiredRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        thiredRow.add(history);
 
         languageInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
@@ -237,6 +234,7 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
                         final LoginUserDataAccessInterface userDataAccessObject = new InMemoryUserDataAccessObject();
                         final User user = userDataAccessObject.get(currentState.getUsername());
                         historyController.execute(user);
+                        historyController.switchToHistoryView();
                     }
                 }
                 }
@@ -250,7 +248,7 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
 
         this.add(seconedRow);
 
-        //this.add(thiredRow);
+        this.add(thiredRow);
 
         this.add(logOut);
     }

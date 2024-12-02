@@ -32,4 +32,8 @@ public class HistoryController {
     public void switchBackToTranslateView() {
         historyUseCaseInteractor.switchBackToTranslateView();
     }
+
+    public void switchToHistoryView() {
+        historyUseCaseInteractor.switchToHistoryView();
+    }
 }

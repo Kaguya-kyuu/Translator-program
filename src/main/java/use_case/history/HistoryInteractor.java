@@ -27,15 +27,16 @@ public class HistoryInteractor implements HistoryInputBoundary {
     @Override
     public void execute(HistoryInputData historyInputData) {
         final User user = historyInputData.getUser();
-        final List<Translate> allTranslation = historyInputData.getAllTranslationsByUser();
-
-        if (allTranslation.isEmpty()) {
-            historyPresenter.prepareFailView("There is not searching history currently.");
+        final List<Translate> allTranslation = historyDataAccessObject.getAllTranslationsByUser(user);
+        if (allTranslation == null || allTranslation.isEmpty()) {
+            historyPresenter.prepareFailView("There is no searching history currently.");
+            System.out.println("testinteracnull");
         }
 
         else {
             try {
-                Map<String, String> history = new HashMap<>();
+                System.out.println("testalltranslation" + allTranslation);
+                final Map<String, String> history = new HashMap<>();
                 for (Translate translate : allTranslation) {
                     history.put(translate.getInputText(), translate.getOutputText());
                 }
@@ -55,5 +56,10 @@ public class HistoryInteractor implements HistoryInputBoundary {
     @Override
     public void switchBackToTranslateView() {
         historyPresenter.switchBackToTranslateView();
+    }
+
+    @Override
+    public void switchToHistoryView() {
+        historyPresenter.switchToHistoryView();
     }
 }

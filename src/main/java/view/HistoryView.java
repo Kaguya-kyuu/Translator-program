@@ -1,24 +1,18 @@
 package view;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import interface_adapter.change_password.LoggedInState;
 import interface_adapter.history.HistoryController;
+import interface_adapter.history.HistoryState;
 import interface_adapter.history.HistoryViewModel;
-import org.json.JSONArray;
-import org.json.JSONString;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 /**
  * The view of translation history.
@@ -29,22 +23,55 @@ public class HistoryView extends JPanel implements PropertyChangeListener {
     private HistoryController historyController;
 
     private final JButton back;
+    private final JButton clear;
 
     public HistoryView(HistoryViewModel historyViewModel) {
         this.historyViewModel = historyViewModel;
         historyViewModel.addPropertyChangeListener(this);
 
+        final JPanel first = new JPanel(new FlowLayout(FlowLayout.LEFT));
         this.back = new JButton("Back");
+        this.clear = new JButton("Clear History");
+        first.add(back);
+        first.add(clear);
 
         back.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         historyController.switchBackToTranslateView();
+                        System.out.println("backworking");
                     }
                 }
         );
-    }
 
+        clear.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+
+                    }
+                }
+        );
+        final JScrollPane scroll = new JScrollPane();
+        final HistoryState historyState = historyViewModel.getState();
+        final Map<String, String> historyMap = historyState.getHistory();
+        final JPanel insidePanel = new JPanel();
+        insidePanel.setLayout(new BoxLayout(insidePanel, BoxLayout.Y_AXIS));
+        insidePanel.add(first);
+        if (historyMap != null) {
+            for (String key: historyMap.keySet()) {
+                final JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                final JLabel labelKey = new JLabel(key);
+                final JLabel labelValue = new JLabel(historyMap.get(key));
+                panel.add(labelKey);
+                panel.add(labelValue);
+                insidePanel.add(panel, 1);
+            }
+        }
+
+        scroll.add(insidePanel);
+        this.add(scroll);
+        scroll.setViewportView(insidePanel);
+    }
 
     /**
      * React to a button click that results in evt.
@@ -59,8 +86,10 @@ public class HistoryView extends JPanel implements PropertyChangeListener {
      *            and the property that has changed.
      */
     @Override
-    public void propertyChange (PropertyChangeEvent evt){
-
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("history")) {
+            this.back.setVisible(true);
+        }
     }
 
     public String getViewName() {
@@ -69,24 +98,5 @@ public class HistoryView extends JPanel implements PropertyChangeListener {
 
     public void setHistoryController(HistoryController historyController) {
         this.historyController = historyController;
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("History");
-        frame.setBounds(400, 150, 800, 600);
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JScrollPane scroll = new JScrollPane(panel);
-        frame.add(scroll);
-//        for (int i = 0; i < 30; i++) {
-//            JButton button = new JButton(String.valueOf(i));
-//            panel.add(button, 0);
-//        }
-        JTextField textField = new JTextField(10);
-        panel.add(textField);
-        textField.setText("This is a test");
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 }
