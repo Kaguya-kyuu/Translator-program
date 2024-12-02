@@ -10,6 +10,7 @@ import entity.Translate;
 import entity.User;
 import use_case.bookmark.BookmarkUserDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.history.HistoryUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
@@ -24,6 +25,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         TranslatorUserDataAccessInterface,
+        HistoryUserDataAccessInterface,
         BookmarkUserDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
@@ -97,7 +99,24 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public void updateTranslation(User user, Translate updatedTranslation) {
         translates.put(updatedTranslation.getInputText(), updatedTranslation);
+    }
 
+    @Override
+    public void clearHistory(User user) {
+        translates.clear();
+        userTranslates.values().clear();
+    }
+
+    @Override
+    public void deleteTranslationHistory(User user, Translate translate) {
+        final String inputText = translate.getInputText();
+        if (existsByText(inputText)) {
+            translates.remove(inputText);
+            userTranslates.get(user).remove(translate);
+        }
+        else {
+            System.out.println("Selected history doesn't exist.");
+        }
     }
 
     @Override
@@ -118,22 +137,4 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         return List.of();
     }
 
-    public interface ChangePasswordUserDataAccessInterface {
-        boolean updatePassword(String newPassword);
-    }
-
-    public class InMemoryUserDataAccessObject implements ChangePasswordUserDataAccessInterface {
-        private User currentUser;
-
-        @Override
-        public boolean updatePassword(String newPassword) {
-            if (currentUser != null) {
-                currentUser.setPassword(newPassword);
-                return true;
-            }
-            return false;
-        }
-    }
-
 }
-

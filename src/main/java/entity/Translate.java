@@ -58,4 +58,9 @@ public class Translate {
     public String getOutputText() {
         return outputText;
     }
+
+    public static void main(String[] args) {
+        Translate translate = new Translate("ZH", "JA", "你好");
+        System.out.println(translate.getOutputText());
+    }
 }
