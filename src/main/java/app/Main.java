@@ -18,6 +18,7 @@ public class Main {
                                             .addTranslateView()
                                             .addHistoryView()
                                             .addBookmarkView()
+                                            .addChangePasswordView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
