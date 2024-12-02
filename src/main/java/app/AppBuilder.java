@@ -7,10 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
-import entity.BookmarkFactory;
-import entity.CommonUserFactory;
-import entity.TranslateFactory;
-import entity.UserFactory;
+import entity.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.bookmark.BookmarkController;
 import interface_adapter.bookmark.BookmarkPresenter;
@@ -19,6 +16,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.feedback.FeedbackController;
+import interface_adapter.feedback.FeedbackPresenter;
+import interface_adapter.feedback.FeedbackViewModel;
 import interface_adapter.history.HistoryController;
 import interface_adapter.history.HistoryPresenter;
 import interface_adapter.history.HistoryViewModel;
@@ -39,6 +39,9 @@ import interface_adapter.translate.TranslateViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.feedback.FeedbackInputBoundary;
+import use_case.feedback.FeedbackInteractor;
+import use_case.feedback.FeedbackOutputBoundary;
 import use_case.history.HistoryInputBoundary;
 import use_case.history.HistoryInteractor;
 import use_case.history.HistoryOutputBoundary;
@@ -90,6 +93,8 @@ public class AppBuilder {
     private HistoryView historyView;
     private BookmarkViewModel bookmarkViewModel;
     private BookmarkView bookmarkView;
+    private FeedbackViewModel feedbackViewModel;
+    private FeedbackView feedbackView;
     private ChangePasswordViewModel changePasswordViewModel;
     private ChangePasswordView changePasswordView;
 
@@ -127,10 +132,9 @@ public class AppBuilder {
         loggedInViewModel = new LoggedInViewModel();
         translateViewModel = new TranslateViewModel();
         historyViewModel = new HistoryViewModel();
-
         changePasswordViewModel = new ChangePasswordViewModel();
-        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel, 
-                                          bookmarkViewModel, changePasswordViewModel);
+        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel, feedbackViewModel,
+                                          changePasswordViewModel, bookmarkViewModel);
         cardPanel.add(translateView, translateView.getViewName());
         return this;
     }
@@ -161,6 +165,17 @@ public class AppBuilder {
         changePasswordViewModel = new ChangePasswordViewModel();
         changePasswordView = new ChangePasswordView(changePasswordViewModel);
         cardPanel.add(changePasswordView, changePasswordView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Feedback View to the application.
+     * @return this builder
+     */
+    public AppBuilder addFeedbackView() {
+        feedbackViewModel = new FeedbackViewModel();
+        feedbackView = new FeedbackView(feedbackViewModel);
+        cardPanel.add(feedbackView, feedbackView.getViewName());
         return this;
     }
 
@@ -200,7 +215,7 @@ public class AppBuilder {
      */
     public AppBuilder addChangePasswordUseCase() {
         final ChangePasswordOutputBoundary changePasswordOutputBoundary =
-                new ChangePasswordPresenter(loggedInViewModel, viewManagerModel, bookmarkViewModel);
+                new ChangePasswordPresenter(loggedInViewModel, viewManagerModel, bookmarkViewModel, feedbackViewModel);
 
         final ChangePasswordInputBoundary changePasswordInteractor =
                 new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
@@ -269,6 +284,23 @@ public class AppBuilder {
         final BookmarkController bookmarkController = new BookmarkController(bookmarkInteractor);
         bookmarkView.setBookmarkController(bookmarkController);
         translateView.setBookmarkController(bookmarkController);
+        return this;
+    }
+
+    /**
+     * Adds the Feedback Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addFeedbackUseCase() {
+        final FeedbackOutputBoundary feedbackOutputBoundary =
+                new FeedbackPresenter(viewManagerModel, feedbackViewModel, loggedInViewModel);
+        final FeedbackFactory feedbackFactory = new FeedbackFactory();
+
+        final FeedbackInputBoundary feedbackInteractor = new FeedbackInteractor(
+                userDataAccessObject, feedbackOutputBoundary, feedbackFactory);
+
+        final FeedbackController feedbackController = new FeedbackController(feedbackInteractor);
+        feedbackView.setFeedbackController(feedbackController);
         return this;
     }
 

@@ -20,6 +20,7 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.feedback.FeedbackViewModel;
 import interface_adapter.history.HistoryController;
 import interface_adapter.history.HistoryState;
 import interface_adapter.history.HistoryViewModel;
@@ -60,6 +61,7 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
     private final JButton logOut;
     private final JButton translate;
     private final JButton history;
+    private final JButton feedback;
     private final JButton bookmark;
     private final JButton addBookmark;
 
@@ -67,7 +69,9 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
     private final JTextField languageOutputField = new JTextField(15);
 
     public TranslateView(LoggedInViewModel loggedInViewModel, TranslateViewModel translateViewModel,
-                         HistoryViewModel historyViewModel, ChangePasswordViewModel changePasswordViewModel, BookmarkViewModel bookmarkViewModel) {
+                         HistoryViewModel historyViewModel, FeedbackViewModel feedbackViewModel, 
+                         ChangePasswordViewModel changePasswordViewModel, BookmarkViewModel bookmarkViewModel) {
+
         this.loggedInViewModel = loggedInViewModel;
         this.translateViewModel = translateViewModel;
         this.historyViewModel = historyViewModel;
@@ -106,6 +110,9 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
         history = new JButton("History");
         this.add(history);
 
+        feedback = new JButton("Feedback");
+        this.add(feedback);
+      
         changePassword = new JButton("Change Password");
         this.add(changePassword);
 
@@ -281,6 +288,13 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
                 }
         );
 
+        feedback.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        changePasswordController.switchToFeedbackView();
+                    }
+                }
+        );
       
         addBookmark.addActionListener(evt -> {
             final TranslateState currentState = translateViewModel.getState();

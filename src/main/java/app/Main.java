@@ -18,6 +18,7 @@ public class Main {
                                             .addTranslateView()
                                             .addHistoryView()
                                             .addBookmarkView()
+                                            .addFeedbackView()
                                             .addChangePasswordView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
@@ -26,6 +27,7 @@ public class Main {
                                             .addTranslateUseCase()
                                             .addHistoryUseCase()
                                             .addBookmarkUseCase()
+                                            .addFeedbackUseCase()
                                             .build();
         application.setLocation(550, 200);
         application.setSize(600, 200);
