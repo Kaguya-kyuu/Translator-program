@@ -5,17 +5,23 @@ package entity;
  */
 public class Bookmark {
     private final String username;
-    private final String translationId;
+    private final String inputLanguage;
+    private final String outputLanguage;
+    private final String inputText;
 
     /**
      * Constructs a Bookmark object.
      *
      * @param username The username of the user who owns the bookmark.
-     * @param translationId The ID of the translation being bookmarked.
+     * @param inputLanguage The ID of the translation being bookmarked.
+     * @param outputLanguage ID of the translation being bookmarked.
+     * @param inputText The ID of the translation being bookmarked.
      */
-    public Bookmark(String username, String translationId) {
+    public Bookmark(String username, String inputLanguage, String outputLanguage, String inputText) {
         this.username = username;
-        this.translationId = translationId;
+        this.inputLanguage = inputLanguage;
+        this.outputLanguage = outputLanguage;
+        this.inputText = inputText;
     }
 
     /**
@@ -27,12 +33,16 @@ public class Bookmark {
         return username;
     }
 
-    /**
-     * Gets the ID of the translation being bookmarked.
-     *
-     * @return The translation ID.
-     */
-    public String getTranslationId() {
-        return translationId;
+    public String getInputLanguage() {
+        return inputLanguage;
     }
+
+    public String getOutputLanguage() {
+        return outputLanguage;
+    }
+
+    public String getInputText() {
+        return inputText;
+    }
+
 }
