@@ -127,9 +127,10 @@ public class AppBuilder {
         loggedInViewModel = new LoggedInViewModel();
         translateViewModel = new TranslateViewModel();
         historyViewModel = new HistoryViewModel();
+
         changePasswordViewModel = new ChangePasswordViewModel();
-        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel,
-                changePasswordViewModel);
+        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel, 
+                                          bookmarkViewModel, changePasswordViewModel);
         cardPanel.add(translateView, translateView.getViewName());
         return this;
     }
@@ -248,6 +249,7 @@ public class AppBuilder {
 
         final TranslateController translateController =
                 new TranslateController(translatorInteractor);
+
         translateView.setTranslateController(translateController);
         return this;
     }
@@ -257,7 +259,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addBookmarkUseCase() {
-        final BookmarkOutputBoundary bookmarkOutputBoundary = new BookmarkPresenter(bookmarkViewModel);
+        final BookmarkOutputBoundary bookmarkOutputBoundary = new BookmarkPresenter(bookmarkViewModel,
+                viewManagerModel, loggedInViewModel);
         final BookmarkFactory bookmarkFactory = new BookmarkFactory();
 
         final BookmarkInputBoundary bookmarkInteractor = new BookmarkInteractor(
@@ -265,6 +268,7 @@ public class AppBuilder {
 
         final BookmarkController bookmarkController = new BookmarkController(bookmarkInteractor);
         bookmarkView.setBookmarkController(bookmarkController);
+        translateView.setBookmarkController(bookmarkController);
         return this;
     }
 
