@@ -8,11 +8,15 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
 import entity.CommonUserFactory;
+import entity.TranslateFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.history.HistoryController;
+import interface_adapter.history.HistoryPresenter;
+import interface_adapter.history.HistoryViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -21,9 +25,15 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.translate.TranslateController;
+import interface_adapter.translate.TranslatePresenter;
+import interface_adapter.translate.TranslateViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.history.HistoryInputBoundary;
+import use_case.history.HistoryInteractor;
+import use_case.history.HistoryOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -33,10 +43,10 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import use_case.translator.TranslatorInputBoundary;
+import use_case.translator.TranslatorInteractor;
+import use_case.translator.TranslatorOutputBoundary;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -54,6 +64,7 @@ public class AppBuilder {
     private final CardLayout cardLayout = new CardLayout();
     // thought question: is the hard dependency below a problem?
     private final UserFactory userFactory = new CommonUserFactory();
+    private final TranslateFactory translateFactory = new TranslateFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
@@ -64,8 +75,11 @@ public class AppBuilder {
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
     private LoggedInViewModel loggedInViewModel;
-    private LoggedInView loggedInView;
+    private TranslateViewModel translateViewModel;
+    private TranslateView translateView;
     private LoginView loginView;
+    private HistoryViewModel historyViewModel;
+    private HistoryView historyView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -97,10 +111,23 @@ public class AppBuilder {
      * Adds the LoggedIn View to the application.
      * @return this builder
      */
-    public AppBuilder addLoggedInView() {
+    public AppBuilder addTranslateView() {
         loggedInViewModel = new LoggedInViewModel();
-        loggedInView = new LoggedInView(loggedInViewModel);
-        cardPanel.add(loggedInView, loggedInView.getViewName());
+        translateViewModel = new TranslateViewModel();
+        historyViewModel = new HistoryViewModel();
+        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel);
+        cardPanel.add(translateView, translateView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the History View to the application.
+     * @return this builder
+     */
+    public AppBuilder addHistoryView() {
+        historyViewModel = new HistoryViewModel();
+        historyView = new HistoryView(historyViewModel);
+        cardPanel.add(historyView, historyView.getViewName());
         return this;
     }
 
@@ -147,7 +174,7 @@ public class AppBuilder {
 
         final ChangePasswordController changePasswordController =
                 new ChangePasswordController(changePasswordInteractor);
-        loggedInView.setChangePasswordController(changePasswordController);
+        translateView.setChangePasswordController(changePasswordController);
         return this;
     }
 
@@ -163,7 +190,33 @@ public class AppBuilder {
                 new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
-        loggedInView.setLogoutController(logoutController);
+        translateView.setLogoutController(logoutController);
+        return this;
+    }
+
+    public AppBuilder addHistoryUseCase() {
+        final HistoryOutputBoundary historyOutputBoundary =
+                new HistoryPresenter(historyViewModel, viewManagerModel);
+
+        final HistoryInputBoundary historyInteractor =
+                new HistoryInteractor(userDataAccessObject, historyOutputBoundary);
+
+        final HistoryController historyController =
+                new HistoryController(historyInteractor);
+        historyView.setHistoryController(historyController);
+        return this;
+    }
+
+    public AppBuilder addTranslateUseCase() {
+        final TranslatorOutputBoundary translateOutputBoundary =
+                new TranslatePresenter(viewManagerModel, translateViewModel);
+
+        final TranslatorInputBoundary translatorInteractor =
+                new TranslatorInteractor(userDataAccessObject, translateOutputBoundary, translateFactory);
+
+        final TranslateController translateController =
+                new TranslateController(translatorInteractor);
+        translateView.setTranslateController(translateController);
         return this;
     }
 

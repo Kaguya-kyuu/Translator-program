@@ -8,8 +8,8 @@ import interface_adapter.ViewModel;
 public class HistoryViewModel extends ViewModel<HistoryState> {
     public static final String BACK_BUTTON_LABLE = "Back";
 
-    public HistoryViewModel(String viewName) {
-        super("History");
+    public HistoryViewModel() {
+        super("history");
         setState(new HistoryState());
     }
 }

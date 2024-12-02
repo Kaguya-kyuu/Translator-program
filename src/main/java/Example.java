@@ -18,6 +18,7 @@ public class Example {
             final TextResult result = translator2.translateText("How are you doing", null, "ja");
             System.out.println(result.getText());
         }
-        catch (InterruptedException e) {}
+        catch (InterruptedException e) {
+        }
         catch (DeepLException e) {}
 }}

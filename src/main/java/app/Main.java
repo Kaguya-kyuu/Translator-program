@@ -15,13 +15,18 @@ public class Main {
         final JFrame application = appBuilder
                                             .addLoginView()
                                             .addSignupView()
-                                            .addLoggedInView()
+                                            .addTranslateView()
+                                            .addHistoryView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
                                             .addChangePasswordUseCase()
+                                            .addTranslateUseCase()
+                                            .addHistoryUseCase()
                                             .build();
-
+        application.setLocation(550, 200);
+        application.setSize(600, 200);
+        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         application.pack();
         application.setVisible(true);
     }

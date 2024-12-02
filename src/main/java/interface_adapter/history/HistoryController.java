@@ -17,7 +17,7 @@ public class HistoryController {
 
     /**
      * Executes the History Use Case.
-     * @param user the user logging in
+     * @param user the user logged in.
      */
     public void execute(User user) {
         final HistoryInputData historyInputData = new HistoryInputData(

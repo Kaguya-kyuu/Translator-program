@@ -43,7 +43,6 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
             try {
                 final Translate translateObject = translateFactory.create(inputLanguage, outputLanguage, inputText);
                 final String translatedText = translateObject.getOutputText();
-
                 translatorDataAccessObject.saveTranslation(translateObject);
 
                 final TranslatorOutputData outputData = new TranslatorOutputData(translatedText, false);

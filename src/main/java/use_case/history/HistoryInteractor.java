@@ -1,6 +1,8 @@
 package use_case.history;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import entity.Translate;
 import entity.User;
@@ -25,15 +27,19 @@ public class HistoryInteractor implements HistoryInputBoundary {
     @Override
     public void execute(HistoryInputData historyInputData) {
         final User user = historyInputData.getUser();
-        final List<Translate> alltranslation = historyInputData.getAllTranslationsByUser();
+        final List<Translate> allTranslation = historyInputData.getAllTranslationsByUser();
 
-        if (alltranslation.isEmpty()) {
+        if (allTranslation.isEmpty()) {
             historyPresenter.prepareFailView("There is not searching history currently.");
         }
 
         else {
             try {
-                final HistoryOutputData outputData = new HistoryOutputData(user, false);
+                Map<String, String> history = new HashMap<>();
+                for (Translate translate : allTranslation) {
+                    history.put(translate.getInputText(), translate.getOutputText());
+                }
+                final HistoryOutputData outputData = new HistoryOutputData(user, history, false);
                 historyPresenter.prepareSuccessView(outputData);
             }
             catch (IllegalArgumentException illegalArgumentException) {

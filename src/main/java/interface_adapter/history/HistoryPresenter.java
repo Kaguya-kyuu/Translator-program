@@ -1,8 +1,7 @@
 package interface_adapter.history;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.signup.SignupViewModel;
+import interface_adapter.translate.TranslateState;
 import interface_adapter.translate.TranslateViewModel;
 import use_case.history.HistoryOutputBoundary;
 import use_case.history.HistoryOutputData;
@@ -11,11 +10,11 @@ import use_case.history.HistoryOutputData;
  * The presenter for the History Use Case.
  */
 public class HistoryPresenter implements HistoryOutputBoundary {
-    private final TranslateViewModel translateViewModel;
+    private final HistoryViewModel historyViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public HistoryPresenter(TranslateViewModel translateViewModel, ViewManagerModel viewManagerModel) {
-        this.translateViewModel = translateViewModel;
+    public HistoryPresenter(HistoryViewModel historyViewModel, ViewManagerModel viewManagerModel) {
+        this.historyViewModel = historyViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 
@@ -25,6 +24,14 @@ public class HistoryPresenter implements HistoryOutputBoundary {
      */
     @Override
     public void prepareSuccessView(HistoryOutputData outputData) {
+        final HistoryState historyState = historyViewModel.getState();
+        historyState.setHistory(outputData.getHistory());
+        this.historyViewModel.setState(historyState);
+        this.historyViewModel.firePropertyChanged("history");
+
+        this.viewManagerModel.setState(historyViewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged("history");
+
     }
 
     /**
@@ -33,11 +40,14 @@ public class HistoryPresenter implements HistoryOutputBoundary {
      */
     @Override
     public void prepareFailView(String errorMessage) {
+        final HistoryState historyState = historyViewModel.getState();
+        historyState.setHistoryError(errorMessage);
+        historyViewModel.firePropertyChanged("history");
     }
 
     @Override
     public void switchBackToTranslateView() {
-        viewManagerModel.setState(translateViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.setState(historyViewModel.getViewName());
+        viewManagerModel.firePropertyChanged("history");
     }
 }
