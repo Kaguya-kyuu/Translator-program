@@ -1,6 +1,8 @@
 package interface_adapter.translate;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.bookmark.BookmarkState;
+import interface_adapter.bookmark.BookmarkViewModel;
 import use_case.translator.TranslatorOutputBoundary;
 import use_case.translator.TranslatorOutputData;
 
@@ -11,11 +13,14 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
 
     private final TranslateViewModel translateViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final BookmarkViewModel bookmarkViewModel;
 
     public TranslatePresenter(ViewManagerModel viewManagerModel,
-                          TranslateViewModel translateViewModel) {
+                          TranslateViewModel translateViewModel,
+                              BookmarkViewModel bookmarkViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.translateViewModel = translateViewModel;
+        this.bookmarkViewModel = bookmarkViewModel;
     }
 
     /**
@@ -42,5 +47,11 @@ public class TranslatePresenter implements TranslatorOutputBoundary {
         final TranslateState translateState = translateViewModel.getState();
         translateState.setTranslationError(errorMessage);
         translateViewModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToBookmarkView() {
+        viewManagerModel.setState(bookmarkViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }

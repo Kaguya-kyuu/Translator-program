@@ -31,6 +31,10 @@ public class Translate {
         return inputText;
     }
 
+    public String getOutputText() {
+        return outputText;
+    }
+
     /**
      * Translate the given text.
      * @param inputLang input language
@@ -53,9 +57,5 @@ public class Translate {
             System.out.println(exception.getMessage());
         }
         return output;
-    }
-
-    public String getOutputText() {
-        return outputText;
     }
 }

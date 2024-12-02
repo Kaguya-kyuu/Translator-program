@@ -10,4 +10,9 @@ public interface TranslatorInputBoundary {
      * @param translatorInputData the input data.
      */
     void execute(TranslatorInputData translatorInputData);
+
+    /**
+     * Executes the switch to bookmark view use case.
+     */
+    void switchToBookmarkView();
 }

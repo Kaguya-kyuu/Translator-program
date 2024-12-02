@@ -5,6 +5,8 @@ import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.translate.TranslateState;
+import interface_adapter.translate.TranslateViewModel;
 import use_case.logout.LogoutOutputBoundary;
 import use_case.logout.LogoutOutputData;
 
@@ -13,16 +15,16 @@ import use_case.logout.LogoutOutputData;
  */
 public class LogoutPresenter implements LogoutOutputBoundary {
 
-    private LoggedInViewModel loggedInViewModel;
+    private TranslateViewModel translateViewModel;
     private ViewManagerModel viewManagerModel;
     private LoginViewModel loginViewModel;
 
     public LogoutPresenter(ViewManagerModel viewManagerModel,
-                          LoggedInViewModel loggedInViewModel,
+                          TranslateViewModel translateViewModel,
                            LoginViewModel loginViewModel) {
         // TODO: assign to the three instance variables.
         this.viewManagerModel = viewManagerModel;
-        this.loggedInViewModel = loggedInViewModel;
+        this.translateViewModel = translateViewModel;
         this.loginViewModel = loginViewModel;
     }
 
@@ -33,10 +35,10 @@ public class LogoutPresenter implements LogoutOutputBoundary {
 
         // We also need to set the username in the LoggedInState to
         // the empty string.
-        final LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setUsername("");
-        this.loggedInViewModel.setState(loggedInState);
-        this.loggedInViewModel.firePropertyChanged();
+        final TranslateState translateState = translateViewModel.getState();
+        translateState.setUsername("");
+        this.translateViewModel.setState(translateState);
+        this.translateViewModel.firePropertyChanged();
 
         final LoginState loginState = loginViewModel.getState();
         loginState.setUsername("");

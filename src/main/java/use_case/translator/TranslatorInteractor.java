@@ -6,7 +6,6 @@ import entity.TranslateFactory;
 /**
  * The Translator Interactor.
  */
-
 public class TranslatorInteractor implements TranslatorInputBoundary {
     private final TranslatorUserDataAccessInterface translatorDataAccessObject;
     private final TranslatorOutputBoundary translatorPresenter;
@@ -26,6 +25,7 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
      * @param inputData the input data containing text and language details
      */
 
+    @Override
     public void execute(TranslatorInputData inputData) {
         final String inputText = inputData.getInputText();
         final String inputLanguage = inputData.getInputLanguage();
@@ -42,11 +42,10 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
         else {
             try {
                 final Translate translateObject = translateFactory.create(inputLanguage, outputLanguage, inputText);
-                final String translatedText = translateObject.getOutputText();
-
                 translatorDataAccessObject.saveTranslation(translateObject);
 
-                final TranslatorOutputData outputData = new TranslatorOutputData(translatedText, false);
+                final TranslatorOutputData outputData = new TranslatorOutputData(translateObject.getOutputText(),
+                        false);
                 translatorPresenter.prepareSuccessView(outputData);
             }
             catch (IllegalArgumentException illegalArgumentException) {
@@ -55,4 +54,10 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
             }
         }
     }
+
+    @Override
+    public void switchToBookmarkView() {
+        translatorPresenter.switchToBookmarkView();
+    }
+
 }

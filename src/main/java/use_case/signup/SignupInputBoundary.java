@@ -12,7 +12,7 @@ public interface SignupInputBoundary {
     void execute(SignupInputData signupInputData);
 
     /**
-     * Executes the switch to login view use case.
+     * Executes the switch to translate view use case.
      */
-    void switchToLoginView();
+    void switchToTranslateView();
 }

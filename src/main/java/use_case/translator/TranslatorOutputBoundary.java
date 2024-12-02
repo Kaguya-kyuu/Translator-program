@@ -16,4 +16,9 @@ public interface TranslatorOutputBoundary {
      * @param errorMessage the explanation of the failure
      */
     void prepareFailView(String errorMessage);
+
+    /**
+     * Switches to the Bookmark View.
+     */
+    void switchToBookmarkView();
 }

@@ -5,6 +5,7 @@ package interface_adapter.translate;
  */
 public class TranslateState {
 
+    private String username = "";
     private String inputLanguage = "";
     private String outputLanguage = "";
     private String inputText = "";
@@ -14,6 +15,7 @@ public class TranslateState {
 
     // Copy constructor
     public TranslateState(TranslateState copy) {
+        this.username = copy.username;
         this.inputLanguage = copy.inputLanguage;
         this.outputLanguage = copy.outputLanguage;
         this.inputText = copy.inputText;
@@ -24,6 +26,14 @@ public class TranslateState {
 
     // Default constructor
     public TranslateState() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getInputLanguage() {

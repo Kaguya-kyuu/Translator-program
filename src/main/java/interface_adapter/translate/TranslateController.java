@@ -26,4 +26,10 @@ public class TranslateController {
         userTranslateUseCaseController.execute(translatorInputData);
     }
 
+    /**
+     * Executes the "switch to BookmarkView" Use Case.
+     */
+    public void switchToBookmarkView() {
+        userTranslateUseCaseController.switchToBookmarkView();
+    }
 }
