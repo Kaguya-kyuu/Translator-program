@@ -23,10 +23,12 @@ public class BookmarkController {
      * Adds a bookmark for the given translation.
      *
      * @param username The username of the user adding the bookmark.
-     * @param translationId The ID of the translation to be bookmarked.
+     * @param inputLanguage input language of the translation to be bookmarked.
+     * @param outputLanguage output language of the translation to be bookmarked.
+     * @param inputText The input text of the translation to be bookmarked.
      */
-    public void addBookmark(String username, String translationId) {
-        final BookmarkInputData inputData = new BookmarkInputData(username, translationId);
+    public void addBookmark(String username, String inputLanguage, String outputLanguage, String inputText) {
+        final BookmarkInputData inputData = new BookmarkInputData(username, inputLanguage, outputLanguage, inputText);
         bookmarkInputBoundary.addBookmark(inputData);
     }
 
@@ -34,10 +36,19 @@ public class BookmarkController {
      * Removes a bookmark for the given translation.
      *
      * @param username The username of the user removing the bookmark.
-     * @param translationId The ID of the translation to be removed from bookmarks.
+     * @param inputLanguage input language of the translation to be removed.
+     * @param outputLanguage output language of the translation to be removed.
+     * @param inputText The input text of the translation to be removed.
      */
-    public void removeBookmark(String username, String translationId) {
-        final BookmarkInputData inputData = new BookmarkInputData(username, translationId);
+    public void removeBookmark(String username, String inputLanguage, String outputLanguage, String inputText) {
+        final BookmarkInputData inputData = new BookmarkInputData(username, inputLanguage, outputLanguage, inputText);
         bookmarkInputBoundary.removeBookmark(inputData);
+    }
+
+    /**
+     * Executes the "switch to TranslateView" Use Case.
+     */
+    public void switchToTranslateView() {
+        bookmarkInputBoundary.switchToTranslateView();
     }
 }

@@ -18,4 +18,9 @@ public interface BookmarkOutputBoundary {
      * @param errorMessage The error message describing why the bookmark action failed.
      */
     void prepareFailView(String errorMessage);
+
+    /**
+     * Switches to the Translate View.
+     */
+    void switchToTranslateView();
 }
