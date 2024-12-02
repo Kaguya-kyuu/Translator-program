@@ -30,12 +30,10 @@ public class HistoryInteractor implements HistoryInputBoundary {
         final List<Translate> allTranslation = historyDataAccessObject.getAllTranslationsByUser(user);
         if (allTranslation == null || allTranslation.isEmpty()) {
             historyPresenter.prepareFailView("There is no searching history currently.");
-            System.out.println("testinteracnull");
         }
 
         else {
             try {
-                System.out.println("testalltranslation" + allTranslation);
                 final Map<String, String> history = new HashMap<>();
                 for (Translate translate : allTranslation) {
                     history.put(translate.getInputText(), translate.getOutputText());
