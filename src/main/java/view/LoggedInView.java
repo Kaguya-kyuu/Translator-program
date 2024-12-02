@@ -250,17 +250,167 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.logoutController = logoutController;
     }
 
-    public class ChangePasswordView extends JPanel {
-        public ChangePasswordView() {
-            this.setLayout(new GridLayout(2, 1));
+    private final JButton changePasswordButton;
 
-            // Other components here...
+    public LoggedInView(LoggedInViewModel loggedInViewModel) {
+        this.loggedInViewModel = loggedInViewModel;
+        this.loggedInViewModel.addPropertyChangeListener(this);
+        this.translateViewModel = new TranslateViewModel();
 
-            JButton changePasswordButton = new JButton("Change Password");
-            changePasswordButton.addActionListener(e -> {
-                ViewManager.getInstance().navigateTo(new ChangePasswordView());
-            });
-            this.add(changePasswordButton);
-        }
+        final JLabel title = new JLabel("Translator Name");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final LabelTextPanel languageInput = new LabelTextPanel(
+                new JLabel(""), languageInputField);
+
+        final LabelTextPanel languageOutput = new LabelTextPanel(
+                new JLabel(""), languageOutputField);
+
+        final JLabel usernameInfo = new JLabel("Currently logged in: ");
+        username = new JLabel();
+
+        final JLabel languageInfo = new JLabel("Language");
+        final JLabel translatedLanguageInfo = new JLabel("             Language");
+
+        final JLabel sourceLanguageLabel = new JLabel("Source Language: ");
+        final JLabel translatedLanguageLabel = new JLabel("Translated Language: ");
+
+        final JPanel buttons = new JPanel();
+        logOut = new JButton("Log Out");
+        buttons.add(logOut);
+
+        translate = new JButton("Translate");
+        buttons.add(translate);
+
+        history = new JButton("History");
+        buttons.add(history);
+
+        toBookmarkButton = new JButton("Bookmark");
+        buttons.add(toBookmarkButton);
+
+        changePasswordButton = new JButton("Change Password");
+        buttons.add(changePasswordButton);
+
+        // Add action listener for the Change Password button
+        changePasswordButton.addActionListener(evt -> {
+            changePasswordController.switchToChangePasswordView();
+        });
+
+        toBookmarkButton.addActionListener(evt -> {
+            changePasswordController.switchToBookmarkView();
+        });
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        final JPanel firstRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        firstRow.add(sourceLanguageLabel);
+        firstRow.add(buttons.getComponent(1));
+        firstRow.add(translatedLanguageLabel);
+
+        final JPanel seconedRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        seconedRow.add(languageInput);
+        seconedRow.add(languageOutput);
+
+        final JPanel thiredRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        thiredRow.add(languageInfo);
+        thiredRow.add(translatedLanguageInfo);
+
+        languageOutputField.getDocument().addDocumentListener(new DocumentListener() {
+            private void documentListenerHelper() {
+                final TranslateState currentState = translateViewModel.getState();
+                currentState.setOutputLanguage(languageOutputField.getText());
+                translateViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+
+        languageInputField.getDocument().addDocumentListener(new DocumentListener() {
+            private void documentListenerHelper() {
+                final TranslateState currentState = translateViewModel.getState();
+                currentState.setInputLanguage(languageInputField.getText());
+                translateViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+
+        inputTextField.getDocument().addDocumentListener(new DocumentListener() {
+            private void documentListenerHelper() {
+                final TranslateState currentState = translateViewModel.getState();
+                currentState.setInputText(inputTextField.getText());
+                translateViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+
+        translate.addActionListener(evt -> {
+            if (evt.getSource().equals(translate)) {
+                final TranslateState currentState = translateViewModel.getState();
+
+                this.translateController.execute(currentState.getInputLanguage(),
+                        currentState.getOutputLanguage(), currentState.getInputText());
+                translatedTextArea.setText(currentState.getOutputText());
+            }
+        });
+
+        logOut.addActionListener(evt -> {
+            if (evt.getSource().equals(logOut)) {
+                final LoggedInState currentState = loggedInViewModel.getState();
+
+                logoutController.execute(
+                        currentState.getUsername()
+                );
+            }
+        });
+
+        this.add(title);
+        this.add(usernameInfo);
+        this.add(username);
+        this.add(firstRow);
+        this.add(seconedRow);
+        this.add(thiredRow);
+        this.add(buttons);
     }
+
 }
