@@ -17,6 +17,7 @@ import entity.Translate;
 import entity.User;
 import interface_adapter.bookmark.BookmarkState;
 import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.history.HistoryController;
@@ -30,6 +31,7 @@ import interface_adapter.bookmark.BookmarkViewModel;
 import interface_adapter.bookmark.BookmarkController;
 import org.json.JSONArray;
 import org.json.JSONString;
+import use_case.change_password.ChangePasswordInputData;
 import use_case.history.HistoryUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 
@@ -42,7 +44,9 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
     private final LoggedInViewModel loggedInViewModel;
     private final TranslateViewModel translateViewModel;
     private final HistoryViewModel historyViewModel;
+    private final ChangePasswordViewModel changePasswordViewModel;
     private final BookmarkViewModel bookmarkViewModel;
+  
     private final JLabel passwordErrorField = new JLabel();
     private ChangePasswordController changePasswordController;
     private LogoutController logoutController;
@@ -52,6 +56,7 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
 
     private final JLabel username;
 
+    private final JButton changePassword;
     private final JButton logOut;
     private final JButton translate;
     private final JButton history;
@@ -62,14 +67,17 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
     private final JTextField languageOutputField = new JTextField(15);
 
     public TranslateView(LoggedInViewModel loggedInViewModel, TranslateViewModel translateViewModel,
-                         HistoryViewModel historyViewModel, BookmarkViewModel bookmarkViewModel) {
+                         HistoryViewModel historyViewModel, ChangePasswordViewModel changePasswordViewModel, BookmarkViewModel bookmarkViewModel) {
         this.loggedInViewModel = loggedInViewModel;
         this.translateViewModel = translateViewModel;
         this.historyViewModel = historyViewModel;
+        this.changePasswordViewModel = changePasswordViewModel;
         this.bookmarkViewModel = bookmarkViewModel;
+      
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.translateViewModel.addPropertyChangeListener(this);
         this.historyViewModel.addPropertyChangeListener(this);
+        this.changePasswordViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel("Translator Name");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -97,6 +105,9 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
 
         history = new JButton("History");
         this.add(history);
+
+        changePassword = new JButton("Change Password");
+        this.add(changePassword);
 
         bookmark = new JButton("Bookmark");
 
@@ -259,6 +270,18 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
                 }
         );
 
+        changePassword.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(changePassword)) {
+                            final LoggedInState currentState = loggedInViewModel.getState();
+                            changePasswordController.execute(currentState.getPassword(), currentState.getUsername());
+                        }
+                    }
+                }
+        );
+
+      
         addBookmark.addActionListener(evt -> {
             final TranslateState currentState = translateViewModel.getState();
             final String name = loggedInViewModel.getState().getUsername();
@@ -296,10 +319,6 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
             final LoggedInState state = (LoggedInState) evt.getNewValue();
             username.setText(state.getUsername());
         }
-        else if (evt.getPropertyName().equals("password")) {
-            final LoggedInState state = (LoggedInState) evt.getNewValue();
-            JOptionPane.showMessageDialog(null, "password updated for " + state.getUsername());
-        }
         if (evt.getPropertyName().equals("state")) {
             final TranslateState state = (TranslateState) evt.getNewValue();
             languageOutputField.setText(state.getOutputText());
@@ -329,4 +348,5 @@ public class TranslateView extends JPanel implements PropertyChangeListener {
     public void setHistoryController(HistoryController historyController) {
         this.historyController = historyController;
     }
+
 }

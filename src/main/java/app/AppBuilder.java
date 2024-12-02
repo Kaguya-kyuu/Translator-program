@@ -17,6 +17,7 @@ import interface_adapter.bookmark.BookmarkPresenter;
 import interface_adapter.bookmark.BookmarkViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.history.HistoryController;
 import interface_adapter.history.HistoryPresenter;
@@ -53,12 +54,7 @@ import use_case.signup.SignupOutputBoundary;
 import use_case.translator.TranslatorInputBoundary;
 import use_case.translator.TranslatorInteractor;
 import use_case.translator.TranslatorOutputBoundary;
-import view.HistoryView;
-import view.BookmarkView;
-import view.TranslateView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -94,6 +90,8 @@ public class AppBuilder {
     private HistoryView historyView;
     private BookmarkViewModel bookmarkViewModel;
     private BookmarkView bookmarkView;
+    private ChangePasswordViewModel changePasswordViewModel;
+    private ChangePasswordView changePasswordView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -129,7 +127,10 @@ public class AppBuilder {
         loggedInViewModel = new LoggedInViewModel();
         translateViewModel = new TranslateViewModel();
         historyViewModel = new HistoryViewModel();
-        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel, bookmarkViewModel);
+
+        changePasswordViewModel = new ChangePasswordViewModel();
+        translateView = new TranslateView(loggedInViewModel, translateViewModel, historyViewModel, 
+                                          bookmarkViewModel, changePasswordViewModel);
         cardPanel.add(translateView, translateView.getViewName());
         return this;
     }
@@ -153,6 +154,13 @@ public class AppBuilder {
         bookmarkViewModel = new BookmarkViewModel();
         bookmarkView = new BookmarkView(bookmarkViewModel);
         cardPanel.add(bookmarkView, bookmarkView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addChangePasswordView() {
+        changePasswordViewModel = new ChangePasswordViewModel();
+        changePasswordView = new ChangePasswordView(changePasswordViewModel);
+        cardPanel.add(changePasswordView, changePasswordView.getViewName());
         return this;
     }
 
