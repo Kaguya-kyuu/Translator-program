@@ -25,5 +25,4 @@ public class TranslateController {
 
         userTranslateUseCaseController.execute(translatorInputData);
     }
-
 }

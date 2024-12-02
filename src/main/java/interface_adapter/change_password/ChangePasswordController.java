@@ -30,4 +30,11 @@ public class ChangePasswordController {
     public void switchToBookmarkView() {
         userChangePasswordUseCaseInteractor.switchToBookmarkView();
     }
+
+    /**
+     * Executes the "switch to FeedbackView" Use Case.
+     */
+    public void switchToFeedbackView() {
+        userChangePasswordUseCaseInteractor.switchToFeedbackView();
+    }
 }

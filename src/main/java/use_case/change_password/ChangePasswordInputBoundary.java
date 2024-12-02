@@ -16,4 +16,8 @@ public interface ChangePasswordInputBoundary {
      */
     void switchToBookmarkView();
 
+    /**
+     * Executes the switch to feedback view use case.
+     */
+    void switchToFeedbackView();
 }
