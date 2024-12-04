@@ -15,4 +15,9 @@ public interface HistoryInputBoundary {
      * Executes to go back to translate view.
      */
     void switchBackToTranslateView();
+
+    /**
+     * Executes to go to history view.
+     */
+    void switchToHistoryView();
 }

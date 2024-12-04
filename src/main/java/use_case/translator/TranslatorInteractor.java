@@ -45,6 +45,7 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
                 final String translatedText = translateObject.getOutputText();
                 translatorDataAccessObject.saveTranslation(translateObject);
 
+
                 final TranslatorOutputData outputData = new TranslatorOutputData(translatedText, false);
                 translatorPresenter.prepareSuccessView(outputData);
             }

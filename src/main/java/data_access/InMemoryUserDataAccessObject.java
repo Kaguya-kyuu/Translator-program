@@ -74,6 +74,12 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public void saveTranslation(Translate translation) {
         translates.put(translation.getInputText(), translation);
+        List<Translate> list = userTranslates.get(get(currentUsername));
+        if (list == null) {
+            list = new ArrayList<>();
+            userTranslates.put(get(currentUsername), list);
+        }
+        list.add(translation);
     }
 
     @Override
@@ -88,7 +94,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
 
     @Override
     public List<Translate> getAllTranslationsByUser(User user) {
-        return userTranslates.get(user);
+        return userTranslates.getOrDefault(user, new ArrayList<>());
     }
 
     @Override
@@ -109,7 +115,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public void clearHistory(User user) {
         translates.clear();
-        userTranslates.values().clear();
+        userTranslates.put(user, new ArrayList<>());
     }
 
     @Override

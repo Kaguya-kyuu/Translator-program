@@ -27,6 +27,10 @@ public class HistoryOutputData {
         return history;
     }
 
+//    public Map<String, String> setHistory(Map<String, String> history) {
+//        this.history = history;
+//    }
+
     public boolean isUseCaseFailed() {
         return useCaseFailed;
     }

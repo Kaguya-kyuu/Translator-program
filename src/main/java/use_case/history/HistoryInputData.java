@@ -26,12 +26,12 @@ public class HistoryInputData {
         return user.getName();
     }
 
-    /**
-     * Get all translations by user.
-     * @return a list of translations.
-     */
-    public List<Translate> getAllTranslationsByUser() {
-        final TranslatorUserDataAccessInterface inMemoryUserDataAccessObject = new InMemoryUserDataAccessObject();
-        return inMemoryUserDataAccessObject.getAllTranslationsByUser(user);
-    }
+//    /**
+//     * Get all translations by user.
+//     * @return a list of translations.
+//     */
+//    public List<Translate> getAllTranslationsByUser() {
+//        final TranslatorUserDataAccessInterface inMemoryUserDataAccessObject = new InMemoryUserDataAccessObject();
+//        return inMemoryUserDataAccessObject.getAllTranslationsByUser(user);
+//    }
 }
