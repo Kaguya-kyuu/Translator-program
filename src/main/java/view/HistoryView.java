@@ -39,7 +39,6 @@ public class HistoryView extends JPanel implements PropertyChangeListener {
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         historyController.switchBackToTranslateView();
-                        System.out.println("backworking");
                     }
                 }
         );
