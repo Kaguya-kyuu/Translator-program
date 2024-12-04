@@ -34,10 +34,14 @@ public class BookmarkInteractor implements BookmarkInputBoundary {
      */
     @Override
     public void addBookmark(BookmarkInputData inputData) {
-        final Bookmark bookmark = bookmarkFactory.create(inputData.getUsername(), inputData.getTranslationId());
+        final Bookmark bookmark = bookmarkFactory.create(inputData.getUsername(),
+                inputData.getInputLanguage(),
+                inputData.getOutputLanguage(),
+                inputData.getInputText());
         bookmarkDataAccess.addBookmark(bookmark);
         bookmarkPresenter.prepareSuccessView(new BookmarkOutputData(inputData.getUsername(),
-                inputData.getTranslationId(), "Bookmark added successfully"));
+                inputData.getInputLanguage(), inputData.getOutputLanguage(), inputData.getInputText(),
+                "Bookmark added successfully"));
     }
 
     /**
@@ -47,9 +51,17 @@ public class BookmarkInteractor implements BookmarkInputBoundary {
      */
     @Override
     public void removeBookmark(BookmarkInputData inputData) {
-        final Bookmark bookmark = bookmarkFactory.create(inputData.getUsername(), inputData.getTranslationId());
+        final Bookmark bookmark = bookmarkFactory.create(inputData.getUsername(),
+                inputData.getInputLanguage(),
+                inputData.getOutputLanguage(),
+                inputData.getInputText());
         bookmarkDataAccess.removeBookmark(bookmark);
         bookmarkPresenter.prepareSuccessView(new BookmarkOutputData(inputData.getUsername(),
-                inputData.getTranslationId(), "Bookmark removed successfully"));
+                inputData.getInputLanguage(), inputData.getOutputLanguage(), inputData.getInputText(),
+                "Bookmark removed successfully"));
     }
+
+    @Override
+    public void switchToTranslateView() {
+        bookmarkPresenter.switchToTranslateView(); }
 }

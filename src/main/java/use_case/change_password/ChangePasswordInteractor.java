@@ -33,4 +33,8 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
     @Override
     public void switchToBookmarkView() {
         userPresenter.switchToBookmarkView(); }
+
+    @Override
+    public void switchToFeedbackView() {
+        userPresenter.switchToFeedbackView(); }
 }

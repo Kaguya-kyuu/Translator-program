@@ -1,15 +1,19 @@
 package data_access;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import entity.Bookmark;
+import entity.Feedback;
 import entity.Translate;
 import entity.User;
 import use_case.bookmark.BookmarkUserDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.feedback.FeedbackUserDataAccessInterface;
 import use_case.history.HistoryUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -26,7 +30,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         LogoutUserDataAccessInterface,
         TranslatorUserDataAccessInterface,
         HistoryUserDataAccessInterface,
-        BookmarkUserDataAccessInterface {
+        BookmarkUserDataAccessInterface,
+        FeedbackUserDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
     private final Map<String, List<Bookmark>> userBookmarks = new HashMap<>();
@@ -134,7 +139,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     public void removeBookmark(Bookmark bookmark) {
         final List<Bookmark> bookmarks = userBookmarks.get(bookmark.getUsername());
         if (bookmarks != null) {
-            bookmarks.removeIf(mark -> mark.getTranslationId().equals(bookmark.getTranslationId()));
+            bookmarks.removeIf(mark -> mark.getInputText().equals(bookmark.getInputText()));
         }
     }
 
@@ -143,4 +148,22 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         return List.of();
     }
 
+    @Override
+    public void saveFeedback(Feedback feedback) {
+        final String feedbackUsername = feedback.getUsername();
+        final String feedbackMessage = feedback.getFeedback();
+        final String[] newRow = new String[]{feedbackUsername, feedbackMessage};
+
+        final String filePath = "feedback.csv";
+        try (FileWriter writer = new FileWriter(filePath, true)) {
+            // Convert the array to a CSV formatted row
+            final String newLine = String.join(",", newRow);
+
+            // Add a newline character before appending (if needed)
+            writer.write("\n" + newLine);
+        }
+        catch (IOException error) {
+            System.err.println("Error writing to file: " + error.getMessage());
+        }
+    }
 }

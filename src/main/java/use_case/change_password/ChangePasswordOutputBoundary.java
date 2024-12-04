@@ -20,4 +20,6 @@ public interface ChangePasswordOutputBoundary {
      * Switches to the Bookmark View.
      */
     void switchToBookmarkView();
+
+    void switchToFeedbackView();
 }

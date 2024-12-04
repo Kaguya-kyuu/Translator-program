@@ -18,4 +18,9 @@ public interface BookmarkInputBoundary {
      * @param inputData The input data containing information about the user and the translation to be removed.
      */
     void removeBookmark(BookmarkInputData inputData);
+
+    /**
+     * Executes the switch to translate view use case.
+     */
+    void switchToTranslateView();
 }
